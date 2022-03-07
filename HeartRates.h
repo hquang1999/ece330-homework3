@@ -9,6 +9,10 @@ class HeartRates {
 		unsigned int dayOfBirth;
 		unsigned int monthOfBirth;
 		unsigned int yearOfBirth;
+		// Types for the current date
+		unsigned int currentDay = 0;
+		unsigned int currentMonth = 0;
+		unsigned int currentYear = 2022;
 
 	public:
 		HeartRates(const string &, const string &, unsigned int = 1, unsigned int = 1, unsigned int = 0);

@@ -1,7 +1,4 @@
 #include "HeartRates.h"
-// current year, change to update
-int currentYear = 2022;
-
 using namespace std;
 
 HeartRates::HeartRates(const string &first, const string &last
@@ -49,7 +46,8 @@ HeartRates::HeartRates(const string &first, const string &last
 	} 
 	else {
 		cout << "Invaid YEAR input" << endl;
-	}	
+	}
+
 }
 
 void HeartRates::setFirstName(const string &first) {
@@ -137,10 +135,65 @@ void HeartRates::getPatientInformation() {
 	cout << "Age: " << getAge() << endl;
 	cout << "Maximum Heart Rate: " << getMaximumHeartRate() << endl;
 }
-unsigned int HeartRates::getAge() const {
-	return currentYear - yearOfBirth;
+
+void determineAge() {
+	unsigned int tempMonth;
+	cout << "Enter Current Month: ";
+	cin >> tempMonth;
+	if ((tempMonth > 0) || (tempMonth <= 12)) {
+		currentMonth = tempMonth;
+	} 
+	else {
+		cout << "Invalid MONTH, please re-enter" << endl;
+		determineAge();
+	}
+
+	unsigned int tempDay;
+	cout << "Enter Current Date: ";
+	cin >> tempDay;
+	if (tempMonth == 2) {
+		if ((tempDay <= 28) || (tempDay > 0)) {
+			currentDay = tempDate;
+		}
+		else { 
+			cout << "Invalid DATE input" << endl;
+			determineAge();
+		}
+	}
+	else if ((tempMonth == 1) || (tempMonth == 3) || (tempMonth == 5) || 
+			 (tempMonth == 7) || (tempMonth == 8) || (tempMonth == 10) ||
+			 (tempMonth == 12)) {
+		if ((tempDay <= 31) || (tempDay > 0)) {
+			currentDay = tempDate;
+		}
+		else {
+			cout << "Invalid DATE input" << endl;
+			determineAge();
+		}
+	}
+	else {
+		if ((tempDay <= 30) || (tempDay > 0)) {
+			currentDay = tempDate;
+		}
+		else {
+			cout << "Invalid DATE input" << endl;
+			determineAge();
+		}
+	}
 }
 
+unsigned int HeartRates::getAge() const {
+	/*
+	int tempMonth;
+	int tempDay;
+	if (currentDay == 0) {
+		cout << "Enter Current Month
+	}
+	*/
+
+	determineAge();
+	return currentYear - yearOfBirth;
+}
 unsigned int HeartRates::getMaximumHeartRate() const {
 	return 220 - getAge();	
 }
