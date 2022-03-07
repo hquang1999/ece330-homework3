@@ -13,7 +13,7 @@ class HeartRates {
 		unsigned int currentDay = 0;
 		unsigned int currentMonth = 0;
 		unsigned int currentYear = 2022;
-
+	
 	public:
 		HeartRates(const string &, const string &, unsigned int = 1, unsigned int = 1, unsigned int = 0);
 
@@ -32,8 +32,11 @@ class HeartRates {
 		void setYear(unsigned int);
 		unsigned int getYear() const;
 
+
 		void getPatientInformation();
-		unsigned int getAge() const;
-		unsigned int getMaximumHeartRate() const;
+		void deterCurrentMonth();
+		void deterCurrentDay();
+		unsigned int getAge();
+		unsigned int getMaximumHeartRate();
 		void  getTargetHeartRate();
 };
