@@ -234,6 +234,7 @@ string HeartRates::monthToString(unsigned int month) {
 			return "December";
 	}
 }
+
 // Setters and getters for the current date 
 void HeartRates::setCurrentYear(unsigned int year) {
 	if (isDateValid(year,2,1)) {
@@ -260,7 +261,6 @@ void HeartRates::setCurrentMonth(unsigned int month) {
 unsigned int HeartRates::getCurrentMonth() const {
 	return currentMonth;
 }
-
 
 void HeartRates::setCurrentDay(unsigned int day) {
 	if (currentMonth != 0) {
@@ -319,10 +319,11 @@ unsigned int HeartRates::getMaximumHeartRate() {
 }
 
 void HeartRates::getTargetHeartRate() {
+	int max50Percent = getMaximumHeartRate() * 0.5;
+	int max85Percent = getMaximumHeartRate() * 0.85;
 	cout << "Ideal Heart Rate: " 
-		 << getMaximumHeartRate() * 0.5 << " - " 
-		 << getMaximumHeartRate()  * 0.85 
-		 << " bpm" << endl;
+		 << max50Percent << " - " 
+		 << max85Percent << " bpm" << endl;
 }
 
 void HeartRates::getPatientInformation() { 
