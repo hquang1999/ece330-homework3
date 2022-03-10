@@ -236,7 +236,12 @@ string HeartRates::monthToString(unsigned int month) {
 }
 // Setters and getters for the current date 
 void HeartRates::setCurrentYear(unsigned int year) {
-	currentYear = year;
+	if (isDateValid(year,2,1)) {
+		currentYear = year;
+	}
+	else {
+		throw invalid_argument("Invalid overite off current year");
+	}
 }
 
 unsigned int HeartRates::getCurrentYear() const {
@@ -244,7 +249,12 @@ unsigned int HeartRates::getCurrentYear() const {
 }
 
 void HeartRates::setCurrentMonth(unsigned int month) {
-	currentMonth = month;
+	if (isDateValid(month,3,1)) {
+		currentMonth = month;
+	}
+	else {
+		throw invalid_argument("Invalid overite off current month");
+	}
 }
 
 unsigned int HeartRates::getCurrentMonth() const {
@@ -253,7 +263,17 @@ unsigned int HeartRates::getCurrentMonth() const {
 
 
 void HeartRates::setCurrentDay(unsigned int day) {
-	currentDay = day;		
+	if (currentMonth != 0) {
+		if (isDateValid(day,4,1)) {
+			currentDay = day;		
+		}
+		else {
+			throw invalid_argument("Invalid overite off current day");
+		}
+	}
+	else {
+		throw invalid_argument("Month has not been set yet!");
+	}		
 }
 
 unsigned int HeartRates::getCurrentDay() const {

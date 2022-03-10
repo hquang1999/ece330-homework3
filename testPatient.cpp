@@ -15,9 +15,9 @@ void setPatient(string firstName, string lastName,
 			&& (prevCurrentYear != 0)){
 		// If it's not, check if the patients want to share the dates
 		if (shareDates) {
-			patient.setCurrentDay(prevCurrentDay);
-			patient.setCurrentMonth(prevCurrentMonth);
 			patient.setCurrentYear(prevCurrentYear);
+			patient.setCurrentMonth(prevCurrentMonth);
+			patient.setCurrentDay(prevCurrentDay);
 		}
 	}
 	
@@ -29,9 +29,9 @@ void setPatient(string firstName, string lastName,
 	if ((prevCurrentDay != patient.getCurrentDay()) 
 			&& (prevCurrentMonth != patient.getCurrentMonth()) 
 			&& (prevCurrentYear != patient.getCurrentYear())){
-		prevCurrentDay = patient.getCurrentDay(); 
-		prevCurrentMonth = patient.getCurrentMonth(); 
 		prevCurrentYear = patient.getCurrentYear(); 
+		prevCurrentMonth = patient.getCurrentMonth(); 
+		prevCurrentDay = patient.getCurrentDay(); 
 	}
 } 
 
