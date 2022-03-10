@@ -1,4 +1,4 @@
-##**Heart Rates Program**
+## Heart Rates Program 
 
 **Commands**
 make
