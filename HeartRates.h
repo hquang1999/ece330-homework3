@@ -26,14 +26,18 @@ class HeartRates {
 		void setLastName(const string &);
 		string getLastName() const;
 
-		void setPatientDay(unsigned int);
-		unsigned int getPatientDay() const;
-
-		void setPatientMonth(unsigned int);
-		unsigned int getPatientMonth() const;
-
 		void setPatientYear(unsigned int);
 		unsigned int getPatientYear() const;
+	
+		void setPatientMonth(unsigned int);
+		unsigned int getPatientMonth() const;
+	
+		void setPatientDay(unsigned int);
+		unsigned int getPatientDay() const;
+	
+		// Function that checks if the input is valid corresponding
+		// to its respective day/month/year (more details in .cpp)
+		bool isDateValid(unsigned int, unsigned int, unsigned int);
 
 		// Functions to get input of the current date from the user
 		void deterCurrentYear();

@@ -26,60 +26,8 @@ string HeartRates::getLastName() const {
 	return lastName;
 }
 
-void HeartRates::setPatientDay(unsigned int day) {
-	// Accounting for february 
-	if (monthOfBirth == 2) {
-		// If the month is february, the days must be between 1 - 28
-		if ((day <= 28) && (day > 0)) {
-			dayOfBirth = day;	
-		}
-		else { 
-			throw invalid_argument("Invalid DATE input");
-		}
-	}
-	// Accounting for the months with 31 days
-	else if ((monthOfBirth == 1) || (monthOfBirth == 3) || (monthOfBirth == 5) || 
-			 (monthOfBirth == 7) || (monthOfBirth == 8) || (monthOfBirth == 10) ||
-			 (monthOfBirth == 12)) {
-		if ((day <= 31) && (day > 0)) {
-			dayOfBirth = day;	
-		}
-		else {
-			throw invalid_argument("Invalid DATE input");
-		}
-	}
-	// Other months are accounted for from the the month setters. The months will
-	// stay in scope from 1 - 12.
-	else {
-		// The remaining months will be between 1 - 30
-		if ((day <= 30) && (day > 0)) {
-			dayOfBirth = day;	
-		}
-		else {
-			throw invalid_argument("Invalid DATE input");
-		}
-	}
-}
-
-unsigned int HeartRates::getPatientDay() const {
-	return dayOfBirth;
-}
-
-void HeartRates::setPatientMonth(unsigned int month) {
-	if ((month > 0) && (month <= 12)) {
-		monthOfBirth = month;	
-	}
-	else {
-		throw invalid_argument("Invalid MONTH Input");
-	}
-}
-
-unsigned int HeartRates::getPatientMonth() const {
-	return monthOfBirth;
-}
-
 void HeartRates::setPatientYear(unsigned int year) {
-	if (year > 0) {
+	if (isDateValid(year,1,0)) {
 		yearOfBirth = year;
 	}
 	else {
@@ -91,13 +39,130 @@ unsigned int HeartRates::getPatientYear() const {
 	return yearOfBirth;
 }
 
+void HeartRates::setPatientMonth(unsigned int month) {
+	if (isDateValid(month,3,0)) {
+		monthOfBirth = month;	
+	}
+	else {
+		throw invalid_argument("Invalid MONTH Input");
+	}
+}
+
+unsigned int HeartRates::getPatientMonth() const {
+	return monthOfBirth;
+}
+
+void HeartRates::setPatientDay(unsigned int day) {
+	if (isDateValid(day,4,0)) {
+		dayOfBirth = day;	
+	}
+	else {
+		throw invalid_argument("Invalid DATE input");
+	}
+}
+
+unsigned int HeartRates::getPatientDay() const {
+	return dayOfBirth;
+}
+/* 
+	Function that checks if the input is valid corresponding
+   	to its respective day/month/year.
+
+  	Case 1: Checking if the input x is valid for the year constraints of the patient
+  	Case 2: Checking if the input x is valid for the year constraints of current
+ 	Case 3: Checking if the input x is valid for the month constraints
+   	Case 4: Checking if the input x is valid for the day constraints 
+   		   	that corresponds to the month
+
+   	This function is to aid in cleaning up the boiler plate functions
+
+   	whichMonth determines which month will be used.
+
+   	0 = patient's month
+   	1 = current's month
+*/
+bool HeartRates::isDateValid(unsigned int x, unsigned int type, unsigned int whichMonth) {
+	int month;
+	if (whichMonth == 0) {
+		month = monthOfBirth; 
+	}
+	else if (whichMonth == 1) {
+		month = currentMonth;
+	}
+	else {
+		throw invalid_argument("Invalid input of which month type is used");
+	}
+
+	switch (type) {
+		// Case 1, check the year constraint of the patient
+		// It must be more than 0
+		case 1:
+			if (x > 0) {
+				return true;
+			} 
+			else {
+				return false;
+			}
+		// Case 2, check the year constraint for the current year
+		// It must be more than the year of the patient
+		case 2:
+			if (x > yearOfBirth) {
+				return true;
+			} 
+			else {
+				return false;
+			}	
+		// Case 3, check the general month constraints [1 - 12]
+		case 3:
+			if ((x > 0) && (x <= 12)) {
+				return true;
+			} 
+			else {
+				return false;
+			}
+		// Case 4, check the general day constraints. This is dependent on the month
+		case 4:
+			// Accounting for february 
+			if (month == 2) {
+				// If the month is february, the days must be between 1 - 28
+				if ((x <= 28) && (x > 0)) {
+					return true;
+				}
+				else { 
+					return false;
+				}
+			}
+			// Accounting for the months with 31 days
+			else if ((month == 1) || (month == 3) || (month == 5) || 
+					 (month == 7) || (month == 8) || (month == 10) ||
+					 (month == 12)) {
+				if ((x <= 31) && (x > 0)) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			// No need to check if the other months are valid as months
+			// the setters for both respective months should have been called
+			else {
+				// Check for the monoths with 30 days
+				if ((x <= 30) || (x > 0)) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+	}
+}
+
 // Function to get the current year from the user
 void HeartRates::deterCurrentYear() {
 	unsigned int tempYear;
 	cout << "Enter Current YEAR: ";
 	cin >> tempYear;
-	// The inputted (current) year must be greater than yearOfBirth
-	if (tempYear > yearOfBirth) {
+	if (isDateValid(tempYear,2,1)) {
 		currentYear = tempYear;
 	}
 	else {
@@ -113,10 +178,9 @@ void HeartRates::deterCurrentMonth() {
 	unsigned int tempMonth;
 	cout << "Enter Current MONTH: ";
 	cin >> tempMonth;
-	// The inputted (current) month must be between 1 - 12
-	if ((tempMonth > 0) && (tempMonth <= 12)) {
+	if (isDateValid(tempMonth,3,1)) {
 		currentMonth = tempMonth;
-	} 
+	}
 	else {
 		// Otherwise, recursively call function and ask again
 		cout << "WARNING: Current month " << tempMonth 
@@ -130,40 +194,14 @@ void HeartRates::deterCurrentDay() {
 	unsigned int tempDay;
 	cout << "Enter Current Date: ";
 	cin >> tempDay;
-	if (currentMonth == 2) {
-		if ((tempDay <= 28) && (tempDay > 0)) {
-			currentDay = tempDay;
-		}
-		else { 
-			cout << "WARNING: Current day " << tempDay 
-				 << " if not valid for the month of " << monthToString(currentMonth)
-				 << ", please re-enter!" << endl;
-			deterCurrentDay();
-		}
+	if (isDateValid(tempDay,4,1)) {
+		currentDay = tempDay;
 	}
-	else if ((currentMonth == 1) || (currentMonth == 3) || (currentMonth == 5) || 
-			 (currentMonth == 7) || (currentMonth == 8) || (currentMonth == 10) ||
-			 (currentMonth == 12)) {
-		if ((tempDay <= 31) && (tempDay > 0)) {
-			currentDay = tempDay;
-		}
-		else {
-			cout << "WARNING: Current day " << tempDay 
-				 << " if not valid for the month of " << monthToString(currentMonth)
-				 << ", please re-enter!" << endl;
-			deterCurrentDay();
-		}
-	}
-	else {
-		if ((tempDay <= 30) || (tempDay > 0)) {
-			currentDay = tempDay;
-		}
-		else {
-			cout << "WARNING: Current day " << tempDay 
-				 << " if not valid for the month of " << monthToString(currentMonth)
-				 << ", please re-enter!" << endl;
-			deterCurrentDay();
-		}
+	else { 
+		cout << "WARNING: Current day " << tempDay 
+			 << " if not valid for the month of " << monthToString(currentMonth)
+			 << ", please re-enter!" << endl;
+		deterCurrentDay();
 	}
 }
 
@@ -197,12 +235,12 @@ string HeartRates::monthToString(unsigned int month) {
 	}
 }
 // Setters and getters for the current date 
-void HeartRates::setCurrentDay(unsigned int day) {
-	currentDay = day;		
+void HeartRates::setCurrentYear(unsigned int year) {
+	currentYear = year;
 }
 
-unsigned int HeartRates::getCurrentDay() const {
-	return currentDay;
+unsigned int HeartRates::getCurrentYear() const {
+	return currentYear;
 }
 
 void HeartRates::setCurrentMonth(unsigned int month) {
@@ -213,12 +251,13 @@ unsigned int HeartRates::getCurrentMonth() const {
 	return currentMonth;
 }
 
-void HeartRates::setCurrentYear(unsigned int year) {
-	currentYear = year;
+
+void HeartRates::setCurrentDay(unsigned int day) {
+	currentDay = day;		
 }
 
-unsigned int HeartRates::getCurrentYear() const {
-	return currentYear;
+unsigned int HeartRates::getCurrentDay() const {
+	return currentDay;
 }
 
 // Simple function that combines all the other determine functions
